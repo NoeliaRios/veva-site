@@ -1,0 +1,69 @@
+[
+  {
+    "id": "105",
+    "art": "105",
+    "name": "Less regulable de algodón",
+    "description": "Un bralette suave y cómodo, perfecto para el día a día.",
+    "image": [
+      "/img/productos/less-regulable-avellana.jpg",
+      "/img/productos/less-regulable-negro.jpg"
+    ],
+    "price": "$30.00",
+    "colores": ["blanco", "negro", "avellana", "rojo", "crema"],
+    "category": "bombachas",
+    "review":["Me encantaron!", "Muy cómodas."]
+  },
+  {
+    "id": "70",
+    "art": "70",
+    "name": "Conjunto nena estampado",
+    "description": "Un conjunto para nenas super cómodo.",
+    "image": [
+      "/img/productos/conjunto-nena-estampado-rosa.jpg",
+      "/img/productos/conjunto-nena-estampado-blanco-con-lila.jpg",
+      "/img/productos/conjunto-nena-estampado-crema.jpg"
+    ],
+    "price": "$30.00",
+    "colores": ["blanco", "rojo", "crema", "rosa", "verdeAgua", "crema"],
+    "category": "nenas"
+  },
+  {
+    "id": "1021",
+    "art": "1021",
+    "name": "Top deportivo",
+    "description": "Un bralette suave y cómodo, perfecto para el día a día.",
+    "image": [
+      "/img/productos/top-deportivo-avellana-frente.jpg",
+      "/img/productos/top-deportivo-gris-frente.jpg"
+    ],
+    "price": "$30.00",
+    "colores": ["blanco", "negro", "avellana", "crema"],
+    "category": "corpiños"
+  },
+  {
+    "id": "140-2",
+    "art": "140/2",
+    "name": "Vedettina Lunares",
+    "description": "Un bralette suave y cómodo, perfecto para el día a día.",
+    "image": [
+      "/img/productos/vedettina-lunares-crema.jpg",
+      "/img/productos/vedettina-lunares-gris-frente.jpg"
+    ],
+    "price": "$30.00",
+    "colores": ["blanco", "negro", "rojo", "crema"],
+    "category": "bombachas"
+  },
+  {
+    "id": "1096",
+    "art": "1096",
+    "name": "Conjunto top Nahla",
+    "description": "Un bralette suave y cómodo, perfecto para el día a día.",
+    "image": [
+      "/img/productos/conjunto-top-nahla-avellana-frente.jpg",
+      "/img/productos/conjunto-top-nahla-avellana-espalda.jpg"
+    ],
+    "price": "$30.00",
+    "colores": ["blanco", "negro", "avellana", "rojo", "crema"],
+    "category": "conjuntos"
+  }
+]

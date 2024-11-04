@@ -1,0 +1,95 @@
+---
+import ColoresItem from "./ColoresItem.astro";
+const { products } = Astro.props;
+---
+
+<ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
+  {
+    products.map((product) => (
+      <li key={product.id} class="relative overflow-hidden group">
+        <a href={`/${product.id}`} class="block">
+          {/* image */}
+          <img
+            src={product.image[0]}
+            alt={product.name}
+            class="w-full h-72 object-cover transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+          />
+
+          {/* imageHover */}
+          <img
+            src={product.image[1]}
+            alt={`${product.name} (vista trasera)`}
+            class="w-full h-72 object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
+          />
+
+          <div class="p-4 text-center relative z-10 mb-2">
+            <h3 class="text-sm font-light tracking-tight text-left">
+              {product.name} - Art. {product.art}
+            </h3>
+            {/* <p class="font-medium mt-1">{product.price}</p> */}
+            <ColoresItem colors={product.colores} />
+          </div>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<!-- <h1>Productos</h1>
+
+<ul class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
+  {
+    products.map((product) => (
+      <li
+        key={product.id}
+        class="relative bg-white rounded-lg shadow-lg overflow-hidden transition transform hover:scale-105 hover:shadow-2xl"
+      >
+        <a href={`/productos/${product.id}`} class="block">
+          {/* Imagen Principal */}
+          <img
+            src={product.image}
+            alt={product.name}
+            class="w-full h-72 object-cover transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+          />
+          {/* Imagen Hover */}
+          <img
+            src={product.imageHover}
+            alt={`${product.name} (vista trasera)`}
+            class="w-full h-72 object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
+          />
+          <div class="p-4 bg-white text-center">
+            <h2 class="text-lg font-semibold text-gray-800 tracking-tight">
+              {product.name}
+            </h2>
+            <p class="text-pink-600 font-bold text-lg mt-1">{product.price}</p>
+          </div>
+          <div class="absolute inset-0 " />
+        </a>
+      </li>
+    ))
+  }
+</ul> -->
+
+<!-- <ul>
+  {
+    products.map((product) => (
+      <li key={product.id}>
+        <a href={`/productos/${product.id}`}>
+          <img src={product.image} alt={product.name} />
+          <h2>{product.name}</h2>
+          <p>{product.price}</p>
+        </a>
+      </li>
+    ))
+  }
+</ul> -->
+
+<!-- <ol class="relative border-s border-gray-200 dark:border-gray-700 ml-2">
+  {
+    products.map((product) => (
+      <li class="mb-10 ms-4">
+        <ProductItem {...product} />
+      </li>
+    ))
+  }
+</ol> -->
