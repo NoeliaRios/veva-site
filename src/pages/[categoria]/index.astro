@@ -1,0 +1,41 @@
+---
+import ProductList from "../../components/ProductList.astro";
+import products from "../../data/products.json";
+import Layout from "../../layouts/Layout.astro";
+import Breadcrumb from "../../components/Breadcrumb.astro";
+
+// Obtener categorías únicas para `getStaticPaths`
+export async function getStaticPaths() {
+  const categories = [...new Set(products.map((product) => product.category))];
+
+  return categories.map((categoria) => ({
+    params: { categoria },
+  }));
+}
+
+const { categoria } = Astro.params;
+
+const categoryProducts = products.filter(
+  (product) => product.category === categoria
+);
+
+const links = [
+  { label: "Inicio", url: "/" },
+  { label: categoria.charAt(0).toUpperCase() + categoria.slice(1), url: null },
+];
+---
+
+<Layout
+  title={`${categoria[0].toUpperCase() + categoria.slice(1)} ideales para vos en Veva Underwear - Lencería Femenina`}
+  description={`${categoria}`}
+>
+  <main class="pt-18">
+    <Breadcrumb links={links} />
+    <!-- <h1 class="mt-2 text-2xl font-bold text-gray-800 mx-6 my-8">
+      {categoria[0].toUpperCase() + categoria.slice(1)}
+    </h1> -->
+
+    <!-- Utilizar el componente ProductList y pasar productos filtrados -->
+    <ProductList products={categoryProducts} />
+  </main>
+</Layout>

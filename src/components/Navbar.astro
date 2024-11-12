@@ -1,6 +1,7 @@
 ---
 import SearchIcon from "../icons/Search.astro";
 import products from "../data/products.json";
+import staticPages from "../data/staticPages.json";
 
 // Extrae categorías únicas
 const uniqueCategories = Array.from(
@@ -72,7 +73,7 @@ let isMenuOpen = false;
       </a>
       <div class="flex items-center">
         <div class="flex items-center ms-3">
-          <div>
+          <!-- <div>
             <button
               type="button"
               class="flex text-sm rounded-full focus:ring-4"
@@ -82,7 +83,7 @@ let isMenuOpen = false;
               <span class="sr-only">Abrir buscador</span>
               <SearchIcon />
             </button>
-          </div>
+          </div> -->
           <div
             class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded dark:bg-gray-700 dark:divide-gray-600"
             id="dropdown-user"
@@ -125,7 +126,13 @@ let isMenuOpen = false;
             <hr />
         ))
       }
-      <li>
+      {staticPages.map((page) => (
+        <li class="py-4">
+        <a href={`/${page.slug}`} class=" text-gray-600 text-bold hover:text-purple-300 font-medium hover:scale-50">{page.title} </a>
+      </li>
+        <hr/>
+    ))}
+      <!-- <li>
         <button
           type="button"
           class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
@@ -185,7 +192,7 @@ let isMenuOpen = false;
             >
           </li>
         </ul>
-      </li>
+      </li> -->
     </ul>
   </div>
 </aside>

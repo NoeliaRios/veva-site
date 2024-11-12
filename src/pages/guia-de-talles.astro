@@ -1,0 +1,50 @@
+---
+import Breadcrumb from "../components/Breadcrumb.astro";
+
+import Layout from "../layouts/Layout.astro";
+import staticPages from "../data/staticPages.json";
+
+const page = staticPages.find((p) => p.slug === "guia-de-talles");
+
+const links = [
+  { label: "Inicio", url: "/" },
+  { label: page.label, url: `/${page.slug}` },
+];
+---
+
+<Layout
+  title="Veva Underwear - Lencería femenina"
+  description="Lencería y ropa interior para damas y niñas. Variedad de talles. Somos fabricantes"
+>
+  <Breadcrumb links={links} />
+  <main class="mb-6 max-w-screen-lg mx-auto">
+    <!-- <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+      {page.label}
+    </h1> -->
+
+    <div class="">
+      <img
+        id="main-image"
+        src="../../public/img/home_assets/guia-de-talle_pañalera.png"
+        alt="guia de talle de pañaleras"
+        class="w-full h-auto object-cover rounded-lg"
+      />
+    </div>
+    <div class="mb-6">
+      <img
+        id="main-image"
+        src="../../public/img/home_assets/guia-de-talle_nenas.png"
+        alt="guia de talle de pañaleras"
+        class="w-full h-auto object-cover rounded-lg"
+      />
+    </div>
+    <div class="mb-6">
+      <img
+        id="main-image"
+        src="../../public/img/home_assets/guia-de-talle_bombacha.png"
+        alt="guia de talle de pañaleras"
+        class="w-full h-auto object-cover rounded-lg"
+      />
+    </div>
+  </main>
+</Layout>

@@ -8,9 +8,14 @@ const colorMap = {
   negro: "#000000",
   rojo: "#ff0000",
   crema: "#f5f5dc",
-  gris: "#808080",
-  rosa: "#e9a4ad",
+  gris: "#c0bfb9",
+  rosaBebe: "#e9a4ad",
   verdeAgua: "#70c1a7",
+  rosaViejo: "#3e9a4ad,",
+  naranja: "#fec781",
+  azul: "#3e5f8a",
+  celeste: "#bdd5ec",
+  lila: "#d7bded",
 };
 ---
 
@@ -28,7 +33,7 @@ const colorMap = {
             class="absolute bottom-full left-1/2 mb-1 translate-x-2 translate-y-12 z-10 transform rounded bg-slate-50 px-1 py-1 text-xs text-slate-400 transition-opacity duration-300 opacity-0 group-hover/item:opacity-100"
             style="white-space: nowrap;"
           >
-            {color[0].toUpperCase() + color.slice(1)}
+            {color[0]?.toUpperCase() + color.slice(1)}
           </span>
         </span>
       </div>

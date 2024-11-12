@@ -2,32 +2,40 @@
 const { links } = Astro.props;
 ---
 
-<nav aria-label="Breadcrumb" class="text-gray-600 text-sm mb-4">
-  <ol class="inline-flex items-center space-x-1">
+<div class="text-gray-600 text-sm mb-4 mt-16 mx-4">
+  <div class="inline-flex items-center space-x-1">
     {
       links.map((link, index) => (
-        <li>
+        <div>
           <div class="flex items-center">
             {index !== 0 && (
               <svg
-                class="h-4 w-4 text-gray-400 mx-1"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                aria-hidden="true"
+                class="font-light"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-slash"
               >
-                <path d="M7.05 4.293a1 1 0 011.414 0L12 7.828a1 1 0 010 1.414l-3.536 3.536a1 1 0 01-1.414-1.414L9.172 10 7.05 7.879a1 1 0 010-1.414z" />
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M17 5l-10 14" />
               </svg>
             )}
             {link.url ? (
-              <a href={link.url} class="text-blue-600 hover:underline">
+              <a href={link.url} class="text-charcoal hover:underline text-sm">
                 {link.label}
               </a>
             ) : (
-              <span class="text-gray-500">{link.label}</span>
+              <span class="text-charcoal uppercase text-sm">{link.label}</span>
             )}
           </div>
-        </li>
+        </div>
       ))
     }
-  </ol>
-</nav>
+  </div>
+</div>

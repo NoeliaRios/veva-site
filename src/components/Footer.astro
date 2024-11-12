@@ -1,5 +1,6 @@
 ---
 import products from "../data/products.json";
+import staticPages from "../data/staticPages.json";
 
 // Extrae categorías únicas
 const uniqueCategories = Array.from(
@@ -163,7 +164,19 @@ const uniqueCategories = Array.from(
           Help & Info
         </h2>
         <ul class="text-white text-xs text-bold">
-          <li class="mb-4">
+          {
+            staticPages.map((page) => (
+              <li class="mb-4">
+                <a
+                  href={`/${page.slug}`}
+                  class="hover:underline hover:text-crema"
+                >
+                  {page.title}
+                </a>
+              </li>
+            ))
+          }
+          <!-- <li class="mb-4">
             <a href="#" class="hover:underline hover:text-crema">Cómo comprar</a
             >
           </li>
@@ -176,7 +189,7 @@ const uniqueCategories = Array.from(
             <a href="#" class="hover:underline hover:text-crema"
               >Tabla de talles</a
             >
-          </li>
+          </li> -->
         </ul>
       </div>
       <!-- <div>
