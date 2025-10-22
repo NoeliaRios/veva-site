@@ -23,10 +23,10 @@ const { products } = Astro.props;
           />
 
           <div class="p-4 text-center relative z-10 mb-2">
-            <h3 class="text-sm font-light tracking-tight text-left">
+            <h3 class="text-sm font-normal tracking-tight text-left">
               {product.name} - Art. {product.art}
             </h3>
-            {/* <p class="font-medium mt-1">{product.price}</p> */}
+            <p class="font-medium font-[outfit] text-left">$ {product.price}</p>
             <ColoresItem colors={product.colores} />
           </div>
         </a>

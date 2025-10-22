@@ -2,9 +2,8 @@
 import ColoresItem from "../../components/ColoresItem.astro";
 import products from "../../data/products.json";
 import Layout from "../../layouts/Layout.astro";
-import ShoppingCart from "../../icons/ShoppingCart.astro";
-import StarIcon from "../../icons/Star.astro";
 import Breadcrumb from "../../components/Breadcrumb.astro";
+import ProductList from "../../components/ProductList.astro";
 
 // Definir rutas estáticas con `categoria` e `id`
 export async function getStaticPaths() {
@@ -21,13 +20,22 @@ if (!categoria || !id) {
 }
 
 // Encontrar el producto que coincida con `categoria` e `id`
-const product = products.find((p) => p.id === id && p.category === categoria);
+const product = products.find(
+  (p) =>
+    p.id === String(id) && p.category.toLowerCase() === categoria.toLowerCase()
+);
 
 if (!product) {
-  throw new Error(
-    `Producto no encontrado para categoría "${categoria}" y ID "${id}".`
-  );
+  // Opcional: redirigir al usuario a la página principal o una página de error
+  return Astro.redirect("/404"); // Cambia la ruta según tu configuración
 }
+
+// Seleccionar 3 productos sugeridos
+// Filtra para excluir el producto actual y selecciona 3 productos al azar
+const suggestedProducts = products
+  .filter((p) => p.id !== product.id) // Excluir el producto actual
+  .sort(() => 0.5 - Math.random()) // Orden aleatorio
+  .slice(0, 5); // Tomar los primeros 5
 
 // Configurar breadcrumb
 const links = [
@@ -39,7 +47,8 @@ const links = [
   { label: product.name, url: null },
 ];
 
-let selectedImage = product.image[0];
+let selectedImage =
+  product.image && product.image.length > 0 ? product.image[0] : null;
 function handleImageClick(image) {
   selectedImage = image;
 }
@@ -53,14 +62,51 @@ function handleImageClick(image) {
     max-width: 600px;
     margin: 0 auto;
   }
-
   .zoom-container img {
     transition: transform 0.3s ease;
     cursor: zoom-in;
   }
-
   .zoom-container:hover img {
     transform: scale(1.2);
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    position: relative;
+  }
+  .modal-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    cursor: zoom-out;
+  }
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px;
   }
 </style>
 
@@ -74,25 +120,23 @@ function handleImageClick(image) {
       <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
         <div class="shrink-0 max-w-md lg:max-w-lg mx-auto">
           <!-- <img class="w-full" src={product.image[0]} alt={product.name} /> -->
-          <!-- Imagen principal con zoom al hacer hover -->
           <div class="zoom-container mb-6">
             <img
               id="main-image"
               src={selectedImage}
               alt={product.name}
               class="w-full h-auto object-cover rounded-lg"
+              data-image={selectedImage}
             />
           </div>
-          <!-- Galería de miniaturas -->
           <div class="flex flex-wrap space-x-2 mb-4">
             {
               product.image.map((img, index) => (
                 <img
                   src={img}
                   alt={`${product.name} ${index + 1}`}
-                  class={`w-16 h-16 object-cover rounded cursor-pointer border-2 border-transparent transition-transform hover:scale-105`}
+                  class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-transparent transition-transform hover:scale-105"
                   data-image={img}
-                  onClick={() => (selectedImage = img)}
                 />
               ))
             }
@@ -101,15 +145,15 @@ function handleImageClick(image) {
 
         <div class="mt-6 sm:mt-8 lg:mt-0">
           <h1
-            class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
+            class="text-lg font-[outfit] font-normal text-gray-900 uppercase sm:text-2xl dark:text-white"
           >
             {product.name} - Art. {product.art}
           </h1>
           <div class="mt-4 sm:items-center sm:gap-4 sm:flex">
             <p
-              class="text-2xl font-extrabold text-gray-900 sm:text-3xl dark:text-white"
+              class="text-base font-semibold text-gray-600 sm:text-3xl dark:text-white"
             >
-              {product.price}
+              ${product.price}
             </p>
 
             <!-- <div class="flex items-center gap-2 mt-2 sm:mt-0">
@@ -133,10 +177,38 @@ function handleImageClick(image) {
               </a>
             </div> -->
           </div>
+          <div class="my-2">
+            <p class="text-sm font-light">
+              Se vende en paquete cerrado con colores y talles surtidos.
+            </p>
+          </div>
+          <div class="my-5">
+            <h3 class="text-sm font-medium text-gray-800">Colores:</h3>
+            <ColoresItem colors={product.colores} />
+          </div>
+          <h3 class="text-sm font-medium text-gray-800 pb-2">
+            Talles disponibles:
+          </h3>
+          <div class="my-2">
+            {
+              product.talles ? (
+                product.talles.map((talle) => (
+                  <span
+                    class="rounded-full border border-gray-300 px-2 py-2 m-1 font-sm"
+                    key={talle}
+                  >
+                    {talle}
+                  </span>
+                ))
+              ) : (
+                <p class="text-gray-500">No hay talles disponibles</p>
+              )
+            }
 
-          <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
-          <h3 class="text-base font-semibold text-gray-900">Colores:</h3>
-          <ColoresItem colors={product.colores} />
+            <div class="my-3">
+              <a href="/guia-de-talles" class="underline">Guía de talles</a>
+            </div>
+          </div>
 
           <p class="mb-6 mt-4 text-gray-500 dark:text-gray-400">
             {product.description}
@@ -144,39 +216,81 @@ function handleImageClick(image) {
 
           <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
             <a
-              href="#"
-              title=""
+              href="https://ig.me/m/veva.underwear"
+              id="add-to-cart"
+              title="Chatea con nosotros"
               class="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-white focus:outline-none bg-lilac rounded-lg border border-lilac hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
               role="button"
+              data-price={`${product.price}`}
+              data-name={`${product.name}`}
+              data-id={product.id}
             >
-              <ShoppingCart />
-              Comprar
+              Preguntar precio
             </a>
           </div>
         </div>
       </div>
     </div>
   </section>
+  <section class="py-8">
+    <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+        Podrían interesarte
+      </h2>
+      <div class="align-center">
+        <ProductList products={suggestedProducts} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal de imagen -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal-content md:h-full">
+      <img id="modal-image" src="" alt="Imagen ampliada" />
+      <button class="close-button" onclick="closeModal()">×</button>
+    </div>
+  </div>
 </Layout>
 
-<!-- Script para manejar el cambio de imagen en cliente -->
 <script>
-  // Función para actualizar la imagen principal
   document.addEventListener("DOMContentLoaded", () => {
     const thumbnails = document.querySelectorAll("[data-image]");
     const mainImage = document.getElementById("main-image");
+    const modalOverlay = document.getElementById("modal-overlay");
+    const modalImage = document.getElementById("modal-image");
 
+    // Función para abrir el modal
+    function openModal(imageSrc) {
+      modalImage.src = imageSrc;
+      modalOverlay.classList.add("active");
+    }
+
+    // Función para cerrar el modal
+    function closeModal() {
+      modalOverlay.classList.remove("active");
+      modalImage.src = "";
+    }
+
+    // Evento para hacer clic en la imagen principal y abrir el modal
+    mainImage.addEventListener("click", () => {
+      openModal(mainImage.src);
+    });
+
+    // Evento para cada thumbnail para cambiar solo la imagen principal
     thumbnails.forEach((thumbnail) => {
-      thumbnail.addEventListener("click", () => {
-        const newSrc = thumbnail.getAttribute("data-image");
+      thumbnail.addEventListener("click", (event) => {
+        const newSrc = event.currentTarget.getAttribute("data-image");
         mainImage.src = newSrc;
       });
     });
+
+    // Cerrar el modal al hacer clic en el overlay o en el botón
+    modalOverlay.addEventListener("click", (event) => {
+      if (event.target === modalOverlay) {
+        closeModal();
+      }
+    });
+
+    window.closeModal = closeModal;
   });
 </script>
-
-<!-- <h1>{product.name}</h1>
-  <img src={product.image} alt={product.name} />
-  <p>{product.description}</p>
-  <p><strong>Precio:</strong> {product.price}</p>
-  <a href="/">Volver a todos los productos</a> -->

@@ -2,12 +2,15 @@
 import SearchIcon from "../icons/Search.astro";
 import products from "../data/products.json";
 import staticPages from "../data/staticPages.json";
+import ShoppingCart from "../icons/ShoppingCart.astro";
 
 // Extrae categorías únicas
 const uniqueCategories = Array.from(
   new Set(products.map((product) => product.category))
 );
 let isMenuOpen = false;
+
+
 ---
 
 <style>
@@ -34,6 +37,26 @@ let isMenuOpen = false;
       filter: drop-shadow(0 -10px 20px rgb(170, 170, 170));
     }
   }
+
+  #search-input {
+  
+  transition: width 0.3s;
+}
+
+
+
+#search-results {
+  display: none; /* Por defecto está oculto */
+}
+
+.search-result-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.search-result-item:hover {
+  background-color: #f0f0f0;
+}
 </style>
 <nav
   class="fixed top-0 z-50 w-full border-gray-200 dark:bg-gray-800 dark:border-gray-700 contents"
@@ -76,6 +99,7 @@ let isMenuOpen = false;
           <!-- <div>
             <button
               type="button"
+              onclick="document.getElementById('search-input').focus()"
               class="flex text-sm rounded-full focus:ring-4"
               aria-expanded="false"
               data-dropdown-toggle="dropdown-user"
@@ -83,27 +107,64 @@ let isMenuOpen = false;
               <span class="sr-only">Abrir buscador</span>
               <SearchIcon />
             </button>
-          </div> -->
+          </div>
+          <div>
+          <button
+      id="cart-icon"
+      class="flex text-sm rounded-full focus:ring-4"
+      aria-label="Carrito"
+    >
+      
+      <ShoppingCart />
+    </button>
+          </div>
           <div
-            class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded dark:bg-gray-700 dark:divide-gray-600"
+            class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded dark:bg-gray-700 dark:divide-gray-600 w-full"
             id="dropdown-user"
           >
             <div class="px-4 py-3" role="none">
               <input
                 type="text"
-                name="username"
-                id="username"
+                name="search-input"
+                id="search-input"
                 autocomplete="search"
-                class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
+                class="block w-10/12 mx-auto px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Buscar..."
               />
             </div>
           </div>
+          <div id="search-results" class="absolute left-0 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto z-50 hidden">
+  </div> -->
         </div>
       </div>
     </div>
   </div>
 </nav>
+
+
+<!-- <div id="cart-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h2 class="text-xl font-bold mb-4">Tu carrito</h2>
+    <div id="cart-items" class="space-y-4">
+     
+    </div>
+    <a
+      id="checkout-button"
+      class="bg-lilac text-white py-2 px-4 rounded-lg mt-4 hover:bg-pink-500"
+    
+     href="/checkout">
+
+      Finalizar compra
+    </>
+    </a>
+    <button
+      id="close-cart"
+      class="text-gray-500 mt-4 hover:underline"
+    >
+      Cerrar
+    </button>
+  </div>
+</div> -->
 
 <aside
   id="logo-sidebar"
@@ -198,6 +259,61 @@ let isMenuOpen = false;
 </aside>
 
 <script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartCount = document.getElementById("cart-count");
+    const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
+
+    if (cartCount) {
+      cartCount.textContent = totalCount;
+      cartCount.style.display = totalCount > 0 ? "inline" : "none";
+    console.log(cart);
+
+    }
+
+    console.log(cart);
+    
+  });
+
+   document.addEventListener("DOMContentLoaded", () => {
+    const cartIcon = document.getElementById("cart-icon");
+    const cartModal = document.getElementById("cart-modal");
+    const closeCartButton = document.getElementById("close-cart");
+    const cartItemsContainer = document.getElementById("cart-items");
+
+    cartIcon.addEventListener("click", () => {
+      updateCartModal();
+      cartModal.classList.remove("hidden");
+    });
+
+    closeCartButton.addEventListener("click", () => {
+      cartModal.classList.add("hidden");
+    });
+
+    function updateCartModal() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cartItemsContainer.innerHTML = cart.length
+        ? cart
+            .map(
+              (item) => `
+            <div class="flex justify-between items-center">
+              <span>${item.name} x${item.quantity}</span>
+              <span>$${item.price * item.quantity}</span>
+            </div>
+          `
+            )
+            .join("")
+        : "<p>Tu carrito está vacío</p>";
+    }
+  });
+
+
+
+
+
+
+
   const body = document.body;
   let lastScroll = 0;
 
@@ -220,4 +336,5 @@ let isMenuOpen = false;
     }
     lastScroll = currentScroll;
   });
+
 </script>

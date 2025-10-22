@@ -1,0 +1,93 @@
+---
+import Layout from "../layouts/Layout.astro";
+import staticPages from "../data/staticPages.json";
+
+const page = staticPages.find((p) => p.slug === "guia-de-talles");
+
+const links = [
+  { label: "Inicio", url: "/" },
+  { label: page.label, url: `/${page.slug}` },
+];
+---
+
+<Layout title="Checkout" description="Finaliza tu pedido">
+  <main class="mb-6 max-w-screen-lg mx-auto">
+    <div class="container mx-auto max-w-3xl">
+      <h1 class="text-2xl font-bold mb-6">Checkout</h1>
+      <p class="mb-4">
+        Por favor, completa los siguientes datos para finalizar tu pedido.
+      </p>
+
+      <form action="/api/send-order" method="POST" class="space-y-6">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700"
+            >Nombre</label
+          >
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="input-field"
+            required
+          />
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >Correo electrónico</label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="input-field"
+            required
+          />
+        </div>
+        <div>
+          <label for="address" class="block text-sm font-medium text-gray-700"
+            >Dirección de envío</label
+          >
+          <input
+            type="text"
+            id="address"
+            name="address"
+            class="input-field"
+            required
+          />
+        </div>
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700"
+            >Teléfono</label
+          >
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            class="input-field"
+            required
+          />
+        </div>
+
+        <div>
+          <p class="text-sm text-gray-600">
+            Total del pedido: <strong>$1000</strong>
+            <br />
+            Realiza la transferencia a la siguiente cuenta bancaria:
+          </p>
+          <ul class="text-sm text-gray-600 mt-2">
+            <li>Banco: Mi Banco</li>
+            <li>CBU: 12345678901234567890</li>
+            <li>Alias: alias.banco</li>
+          </ul>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded hover:bg-blue-700"
+        >
+          Enviar pedido
+        </button>
+      </form>
+    </div>
+  </main>
+</Layout>

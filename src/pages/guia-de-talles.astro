@@ -1,6 +1,5 @@
 ---
 import Breadcrumb from "../components/Breadcrumb.astro";
-
 import Layout from "../layouts/Layout.astro";
 import staticPages from "../data/staticPages.json";
 
@@ -12,39 +11,133 @@ const links = [
 ];
 ---
 
+<style>
+  .zoom-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .zoom-container img {
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+  }
+  /* .zoom-container:hover img {
+    transform: scale(1.2);
+  } */
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    position: relative;
+  }
+  .modal-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    cursor: zoom-out;
+  }
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px;
+  }
+</style>
+
 <Layout
   title="Veva Underwear - Lencería femenina"
   description="Lencería y ropa interior para damas y niñas. Variedad de talles. Somos fabricantes"
 >
   <Breadcrumb links={links} />
   <main class="mb-6 max-w-screen-lg mx-auto">
-    <!-- <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-      {page.label}
-    </h1> -->
-
-    <div class="">
+    <div class="zoom-container mb-6">
       <img
-        id="main-image"
-        src="../../public/img/home_assets/guia-de-talle_pañalera.png"
-        alt="guia de talle de pañaleras"
-        class="w-full h-auto object-cover rounded-lg"
+        src="../../img/home_assets/guia-de-talle_pañalera.png"
+        alt="Guía de talle de pañaleras"
+        class="w-full h-auto object-cover rounded-lg zoomable-image"
       />
     </div>
-    <div class="mb-6">
+    <div class="zoom-container mb-6">
       <img
-        id="main-image"
-        src="../../public/img/home_assets/guia-de-talle_nenas.png"
-        alt="guia de talle de pañaleras"
-        class="w-full h-auto object-cover rounded-lg"
+        src="../../img/home_assets/guia-de-talle_nenas.png"
+        alt="Guía de talle de nenas"
+        class="w-full h-auto object-cover rounded-lg zoomable-image"
       />
     </div>
-    <div class="mb-6">
+    <div class="zoom-container mb-6">
       <img
-        id="main-image"
-        src="../../public/img/home_assets/guia-de-talle_bombacha.png"
-        alt="guia de talle de pañaleras"
-        class="w-full h-auto object-cover rounded-lg"
+        src="../../img/home_assets/guia-de-talle_bombacha.png"
+        alt="Guía de talle de bombacha"
+        class="w-full h-auto object-cover rounded-lg zoomable-image"
       />
     </div>
   </main>
+
+  <!-- Modal de imagen -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal-content">
+      <img id="modal-image" src="" alt="Imagen ampliada" />
+      <button class="close-button" onclick="closeModal()">×</button>
+    </div>
+  </div>
 </Layout>
+
+<!-- Script para manejar el modal -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const zoomableImages = document.querySelectorAll(".zoomable-image");
+    const modalOverlay = document.getElementById("modal-overlay");
+    const modalImage = document.getElementById("modal-image");
+
+    // Función para abrir el modal
+    function openModal(imageSrc) {
+      modalImage.src = imageSrc;
+      modalOverlay.classList.add("active");
+    }
+
+    // Función para cerrar el modal
+    function closeModal() {
+      modalOverlay.classList.remove("active");
+      modalImage.src = "";
+    }
+
+    // Evento para hacer clic en cada imagen "zoomable" para abrir el modal
+    zoomableImages.forEach((image) => {
+      image.addEventListener("click", () => {
+        openModal(image.src);
+      });
+    });
+
+    // Cerrar el modal al hacer clic en el overlay o en el botón
+    modalOverlay.addEventListener("click", (event) => {
+      if (event.target === modalOverlay) {
+        closeModal();
+      }
+    });
+
+    window.closeModal = closeModal;
+  });
+</script>

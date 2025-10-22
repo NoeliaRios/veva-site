@@ -8,15 +8,18 @@ import Breadcrumb from "../../components/Breadcrumb.astro";
 export async function getStaticPaths() {
   const categories = [...new Set(products.map((product) => product.category))];
 
-  return categories.map((categoria) => ({
-    params: { categoria },
-  }));
+  // Excluir rutas estáticas como "checkout"
+  return categories
+    .filter((categoria) => categoria !== "checkout") // Ignorar "checkout"
+    .map((categoria) => ({
+      params: { categoria },
+    }));
 }
 
 const { categoria } = Astro.params;
 
 const categoryProducts = products.filter(
-  (product) => product.category === categoria
+  (product) => product.category === categoria,
 );
 
 const links = [
@@ -31,11 +34,6 @@ const links = [
 >
   <main class="pt-18">
     <Breadcrumb links={links} />
-    <!-- <h1 class="mt-2 text-2xl font-bold text-gray-800 mx-6 my-8">
-      {categoria[0].toUpperCase() + categoria.slice(1)}
-    </h1> -->
-
-    <!-- Utilizar el componente ProductList y pasar productos filtrados -->
     <ProductList products={categoryProducts} />
   </main>
 </Layout>
